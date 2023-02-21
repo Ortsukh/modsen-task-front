@@ -20,7 +20,7 @@
   line-height: 22px;
 }
 .search_field:focus {
-    outline: none;
+  outline: none;
 }
 
 .tags {
@@ -45,7 +45,6 @@
   border-radius: 15px;
   padding: 0 5px;
 }
-
 
 @media (max-width: 360px) {
   .search {

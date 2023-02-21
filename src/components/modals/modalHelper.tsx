@@ -1,7 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import styled from "styled-components";
-import styles from "./modalContextMenu.module.css";
 
 type ModalProps = {
   left: number;
@@ -9,34 +7,28 @@ type ModalProps = {
 };
 
 const ModalHelperDiv = styled.div<{ left: number; top: number }>`
-
   width: 224px;
   height: 29px;
-  left: ${(props) => props.left + 15+ "px"};
+  left: ${(props) => props.left + 15 + "px"};
   top: ${(props) => props.top + 30 + "px"};
   position: absolute;
   background: rgba(1, 1, 1, 0.75);
   border-radius: 1px 8px 2px;
-  
-  font-family: 'Noto Sans';
-font-style: normal;
-font-weight: 500;
-font-size: 16px;
-line-height: 22px;
-color:#FEFEFE;
-text-align:center
+
+  font-family: "Noto Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: #fefefe;
+  text-align: center;
 `;
 
-const ModalHelper= ({
-  left,
-  top,
-
-}: ModalProps) => {
-
+const ModalHelper = ({ left, top }: ModalProps) => {
   return (
-    <div >
+    <div>
       <ModalHelperDiv left={left} top={top}>
-      Right click to open settings
+        Right click to open settings
       </ModalHelperDiv>
     </div>
   );

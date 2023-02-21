@@ -165,9 +165,11 @@ const Note = ({
       })
       .join(splitItem);
   };
+
   const handleDragStart = (event: any, noteObject: NoteType) => {
     handleFirstNoteChangeOrder(noteObject);
   };
+
   const handleDropOver = (event: any) => {
     event.preventDefault();
   };
@@ -178,12 +180,13 @@ const Note = ({
     console.log(noteObject);
     handleSecondNoteChangeOrder(secondNoteObject);
   };
+
   const handleMouseOver = (event: any) => {
     event.preventDefault();
   };
+
   const handleMouseMove = (event: any) => {
     setModalHelper(false);
-
     setMousePosition((prev) => {
       return { ...prev, posX: event.pageX, posY: event.pageY };
     });
@@ -194,6 +197,7 @@ const Note = ({
       return { ...prev, mouseInNote: true };
     });
   };
+
   const handleMouseLeave = (event: any) => {
     setMousePosition((prev) => {
       return { ...prev, mouseInNote: false };

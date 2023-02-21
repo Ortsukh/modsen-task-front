@@ -11,17 +11,15 @@ export type NoteProps = {
   color: "blue" | "pink" | "orange" | "yellow" | "green" | "violet";
 };
 
-
 const NewNote = (props: NoteProps) => {
   const [noteObject, setNoteObject] = useState<NoteType>({
-    id:'',
+    id: "",
     title: "",
     description: "",
     updatedDate: "",
     tags: "",
     order: 0,
-    color: colors[props.color].nextColor ,
-    
+    color: colors[props.color].nextColor,
   });
   const [canCreate, setCanCreate] = useState(false);
   const [contextMenu, setContextMenu] = useState({
@@ -62,7 +60,9 @@ const NewNote = (props: NoteProps) => {
     });
   };
 
-  const colorChangeHandler = (color: "blue" | "pink" | "orange" | "yellow" | "green" | "violet") => {
+  const colorChangeHandler = (
+    color: "blue" | "pink" | "orange" | "yellow" | "green" | "violet"
+  ) => {
     setNoteObject((prev) => {
       return {
         ...prev,
@@ -116,11 +116,13 @@ const NewNote = (props: NoteProps) => {
     });
   };
   return (
-      
-        <div className={`${styles.note} ${styles[noteObject.color]}`}  onContextMenu={openContextMenu} >
+    <div
+      className={`${styles.note} ${styles[noteObject.color]}`}
+      onContextMenu={openContextMenu}
+    >
       <div
         onBlur={(e) => {
-        if(contextMenu.isActive) return
+          if (contextMenu.isActive) return;
           if (!e.currentTarget.contains(e.relatedTarget)) {
             timeChangeHandler();
             setNoteObject((prev) => {
@@ -146,22 +148,24 @@ const NewNote = (props: NoteProps) => {
           value={noteObject.description}
           onChange={descriptionChangeHandler}
         />
-        <span className={styles.note_time}>{ <div className={styles.note_time}>{format(
-                            new Date(),
-                            "yyyy-MM-dd"
-                          ).toLocaleString()}</div>}</span>
+        <span className={styles.note_time}>
+          {
+            <div className={styles.note_time}>
+              {format(new Date(), "yyyy-MM-dd").toLocaleString()}
+            </div>
+          }
+        </span>
         {contextMenu.isActive && (
-        <ModalContextMenu
-          left={contextMenu.left}
-          top={contextMenu.top}
-          id={noteObject.id}
-          closeContextMenu={closeContextMenu}
-          colorChangeHandler={colorChangeHandler}
-          removeNote={()=>console.log(true)}
-        />
-      )}
+          <ModalContextMenu
+            left={contextMenu.left}
+            top={contextMenu.top}
+            id={noteObject.id}
+            closeContextMenu={closeContextMenu}
+            colorChangeHandler={colorChangeHandler}
+            removeNote={() => console.log(true)}
+          />
+        )}
       </div>
-     
     </div>
   );
 };

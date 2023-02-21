@@ -1,0 +1,18 @@
+.home_page {
+display: flex;
+width: 100%;
+height: calc(100vh - 80px);
+justify-content: center;
+align-items: center;
+
+font-family: 'Oswald';
+font-style: normal;
+font-weight: 400;
+font-size: 85px;
+line-height: 126px;
+text-align: center;
+letter-spacing: 0.05em;
+text-transform: uppercase;
+}
+
+

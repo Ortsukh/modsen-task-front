@@ -127,9 +127,9 @@
   margin-right: 5px;
   cursor: pointer;
 }
-@media (max-width: 360px) {
-    .note {
 
-        margin-right: 0;
-      }
+@media (max-width: 360px) {
+  .note {
+    margin-right: 0;
   }
+}

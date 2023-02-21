@@ -1,5 +1,3 @@
-
-
   export type BaseNoteType = {
     title: string;
     description: string;

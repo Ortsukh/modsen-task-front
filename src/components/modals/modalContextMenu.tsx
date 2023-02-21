@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import styles from "./modalContextMenu.module.css";
 
@@ -8,8 +7,10 @@ type ModalProps = {
   top: string;
   id: string;
   closeContextMenu: () => void;
-  colorChangeHandler: (color: "blue" | "pink" | "orange" | "yellow" | "green" | "violet") => void;
-  removeNote:(id:string) => void
+  colorChangeHandler: (
+    color: "blue" | "pink" | "orange" | "yellow" | "green" | "violet"
+  ) => void;
+  removeNote: (id: string) => void;
 };
 
 const ContextMenu = styled.div<{ left: string; top: string }>`
@@ -30,7 +31,6 @@ const ModalContextMenu = ({
   colorChangeHandler,
   removeNote,
 }: ModalProps) => {
-
   const root = useRef(document.createElement("div"));
 
   useEffect(() => {
@@ -89,9 +89,14 @@ const ModalContextMenu = ({
             }}
           ></div>
         </div>
-        <div className={styles.removeButton} onClick={() => {
-             removeNote(id);
-            }}>Remove</div>
+        <div
+          className={styles.removeButton}
+          onClick={() => {
+            removeNote(id);
+          }}
+        >
+          Remove
+        </div>
       </ContextMenu>
     </div>
   );

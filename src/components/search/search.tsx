@@ -3,22 +3,22 @@ import searchIcon from "../../assets/Vector.svg";
 import styles from "./search.module.css";
 
 type SearchProps = {
-    filterNotesByTag:(tag: string)=> void
-  };
+  filterNotesByTag: (tag: string) => void;
+};
 
-const Search = ({filterNotesByTag}:SearchProps) => {
+const Search = ({ filterNotesByTag }: SearchProps) => {
   const [searchTags, setSearchTags] = useState("");
 
-  const titleChangeHandler = (event: any) => {
+  const tagChangeHandler = (event: any) => {
     setSearchTags(event.target.value);
   };
-  const handleKeyDown = (event:any) => {
-    if (event.key === 'Enter') {
-        filterNotesByTag(searchTags)
-      // 👇 Get input value
-    //   setUpdated(message);
+
+  const handleKeyDown = (event: any) => {
+    if (event.key === "Enter") {
+      filterNotesByTag(searchTags);
     }
   };
+
   return (
     <div className={styles.search}>
       <img src={searchIcon} alt="Search tags" />
@@ -26,7 +26,7 @@ const Search = ({filterNotesByTag}:SearchProps) => {
       <input
         placeholder="Search tag..."
         className={styles.search_field}
-        onChange={titleChangeHandler}
+        onChange={tagChangeHandler}
         onKeyDown={handleKeyDown}
       />
     </div>
