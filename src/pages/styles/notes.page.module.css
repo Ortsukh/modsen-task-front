@@ -1,0 +1,11 @@
+.notes_page {
+  padding: 0 60px;
+  overflow-y: scroll;
+  height: 87vh;
+
+}
+.notes {
+  display: flex;
+  overflow: auto;
+}
+

@@ -1,0 +1,58 @@
+.color_button {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #858585;
+  box-shadow: inset 0px 0px 0px 4px #fefefe;
+  border-radius: 25px;
+}
+
+.color_button_containers {
+  width: 205px;
+  height: 40px;
+  display: flex;
+  padding: 0 17px;
+  justify-content: space-between;
+  align-items: center;
+  background: #010101;
+  border-radius: 25px;
+  cursor: pointer;
+  z-index: 1;
+}
+.pink {
+  background-color: #ffafa3;
+}
+.blue {
+  background-color: #80caff;
+}
+.yellow {
+  background-color: #ffd966;
+}
+.green {
+  background-color: #85e0a3;
+}
+.violet {
+  background-color: #d9b8ff;
+}
+.orange {
+  background-color: #ffc470;
+}
+
+.removeButton {
+  width: 67px;
+  height: 40px;
+  position: absolute;
+  left: 214px;
+  background: #858585;
+  border-radius: 0px 10px 10px 0px;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+  cursor: pointer;
+
+  color: #fefefe;
+  font-family: "Noto Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+}
