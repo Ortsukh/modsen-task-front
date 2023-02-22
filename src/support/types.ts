@@ -9,5 +9,6 @@
   export type NoteType = BaseNoteType & {
     id: string;
     updatedDate: string;
+    canUpdate?: boolean;
   };
   

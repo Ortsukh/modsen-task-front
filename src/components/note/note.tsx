@@ -37,11 +37,16 @@ const Note = ({
   const [canUpdate, setCanUpdate] = useState(false);
 
   useEffect(() => {
-    if (canUpdate === true) {
+    if (noteObject.canUpdate === true) {
       updateNote(noteObject);
-      setCanUpdate(false);
+      setNoteObject((prev) => {
+        return {
+          ...prev,
+          canUpdate: false,
+        };
+      });
     }
-  }, [canUpdate]);
+  }, [noteObject]);
 
   useEffect(() => {
     if (mousePosition.mouseInNote) {
@@ -81,6 +86,7 @@ const Note = ({
       return {
         ...prev,
         color: color,
+        canUpdate: true,
       };
     });
     setCanUpdate(true);
@@ -124,10 +130,15 @@ const Note = ({
         }
         if (word.startsWith("#")) {
           setNoteObject((prev) => {
+            console.log(prev);
+            
             if (prev.tags.search(new RegExp(`(^|\\s)${word}(?=\\W|$)`)) < 0) {
+                console.log(word);
+                
               return {
                 ...prev,
-                tags: `${prev.tags} ${word}`,
+                tags: `${prev.tags} ${word}`.trim(),
+                canUpdate: true,
               };
             }
             return prev;
@@ -156,11 +167,10 @@ const Note = ({
           return findAndColorTags(word, "\n");
         }
         if (
-          noteObject.tags.search(new RegExp(`(^|\\s)#${word}(?=\\W|$)`)) > 0
+          noteObject.tags.search(new RegExp(`(^|\\s)#${word}(?=\\W|$)`)) >= 0
         ) {
           return `<span class=${styles.spanColor}>${word}</span>`;
         }
-
         return word;
       })
       .join(splitItem);
@@ -176,8 +186,6 @@ const Note = ({
 
   const handleDragDrop = (event: any, secondNoteObject: NoteType) => {
     event.preventDefault();
-    console.log(secondNoteObject);
-    console.log(noteObject);
     handleSecondNoteChangeOrder(secondNoteObject);
   };
 
@@ -245,7 +253,7 @@ const Note = ({
                   };
                 });
                 timeChangeHandler();
-                updateNote(noteObject);
+                setCanUpdate(true);
               }
             }}
           >
