@@ -35,9 +35,9 @@ const NotesPage = () => {
   ] = useState<NoteType | null>();
 
   useEffect(() => {
-    if(updateTags === true){
-        getAllTags().then((data) => setTags(data));
-        setUpdateTags(false)
+    if (updateTags === true) {
+      getAllTags().then((data) => setTags(data));
+      setUpdateTags(false);
     }
   }, [updateTags]);
 
@@ -47,7 +47,7 @@ const NotesPage = () => {
       setNotes(data);
       setIsLoading(false);
     });
-  }, [newNoteActive, updateNotes]);
+  }, [updateNotes]);
 
   useEffect(() => {
     if (canSwapNote === true && firstNoteOrderChange && secondNoteOrderChange) {
@@ -61,9 +61,13 @@ const NotesPage = () => {
     getNotesByTags(tag).then((data) => setNotes(data));
   };
 
+  const handleUpdateNotes = () => {
+    setUpdateNotes((prev) => !prev);
+  };
+
   const activateNewNoteForm = (status: boolean) => {
     setNewNoteActive(status);
-    setUpdateTags(true)
+    setUpdateTags(true);
   };
 
   const removeNote = (id: string) => {
@@ -72,7 +76,7 @@ const NotesPage = () => {
   };
 
   const handleUpdateTags = () => {
-  setUpdateTags(true)
+    setUpdateTags(true);
   };
 
   const handleFirstNoteChangeOrder = (note: NoteType) => {
@@ -96,27 +100,30 @@ const NotesPage = () => {
 
       <AllTags tags={tags} />
 
-      {!isLoading && <div className={styles.notes}>
-        <NoteEmpty onClick={() => activateNewNoteForm(true)} />
+      {!isLoading && (
+        <div className={styles.notes}>
+          <NoteEmpty onClick={() => activateNewNoteForm(true)} />
 
-        {notes.map((note: NoteType, index: number) => (
-          <Note
-            note={note}
-            key={note.id}
-            removeNote={removeNote}
-            handleFirstNoteChangeOrder={handleFirstNoteChangeOrder}
-            handleSecondNoteChangeOrder={handleSecondNoteChangeOrder}
-            handleUpdateTags={handleUpdateTags}
-          />
-        ))}
+          {notes.map((note: NoteType) => (
+            <Note
+              note={note}
+              key={note.id}
+              removeNote={removeNote}
+              handleFirstNoteChangeOrder={handleFirstNoteChangeOrder}
+              handleSecondNoteChangeOrder={handleSecondNoteChangeOrder}
+              handleUpdateTags={handleUpdateTags}
+            />
+          ))}
 
-        {newNoteActive && (
-          <NewNote
-            onChangeActiveNewForm={activateNewNoteForm}
-            color={notes.length > 1 ? notes[notes.length - 1].color : "blue"}
-          />
-        )}
-      </div>}
+          {newNoteActive && (
+            <NewNote
+              handleUpdateNotes={handleUpdateNotes}
+              onChangeActiveNewForm={activateNewNoteForm}
+              color={notes.length > 1 ? notes[notes.length - 1].color : "blue"}
+            />
+          )}
+        </div>
+      )}
       {isLoading && <div>loading...</div>}
     </div>
   );

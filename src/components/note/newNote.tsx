@@ -7,11 +7,16 @@ import ModalContextMenu from "../modals/modalContextMenu";
 import styles from "./note.module.css";
 
 export type NoteProps = {
+  handleUpdateNotes: () => void;
   onChangeActiveNewForm: (status: boolean) => void;
   color: "blue" | "pink" | "orange" | "yellow" | "green" | "violet";
 };
 
-const NewNote = (props: NoteProps) => {
+const NewNote = ({
+  handleUpdateNotes,
+  onChangeActiveNewForm,
+  color,
+}: NoteProps) => {
   const [noteObject, setNoteObject] = useState<NoteType>({
     id: "",
     title: "",
@@ -19,7 +24,7 @@ const NewNote = (props: NoteProps) => {
     updatedDate: "",
     tags: "",
     order: 0,
-    color: colors[props.color].nextColor,
+    color: colors[color].nextColor,
   });
   const [canCreate, setCanCreate] = useState(false);
   const [contextMenu, setContextMenu] = useState({
@@ -47,7 +52,10 @@ const NewNote = (props: NoteProps) => {
 
   useEffect(() => {
     if (canCreate === true) {
-      createNote(noteObject).then(() => props.onChangeActiveNewForm(false));
+      createNote(noteObject).then(() => {
+        onChangeActiveNewForm(false);
+        handleUpdateNotes();
+      });
     }
   }, [canCreate]);
 

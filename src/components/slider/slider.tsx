@@ -15,6 +15,7 @@ const Slider = function({ newNoteActive, activateNewNoteForm, searchTags }: Slid
   const [notes, setNotes] = useState<NoteType[]>([]);
   const [slide, setSlide] = useState(0);
   const [touchPosition, setTouchPosition] = useState(null);
+  const [updateNotes, setUpdateNotes] = useState(false);
 
   useEffect(() => {
     getNotesByTags(searchTags).then((data) => setNotes(data));
@@ -23,6 +24,10 @@ const Slider = function({ newNoteActive, activateNewNoteForm, searchTags }: Slid
   useEffect(() => {
     getAllNotes().then((data) => setNotes(data));
   }, [newNoteActive]);
+
+  const handleUpdateNotes = () => {
+    setUpdateNotes((prev) => !prev);
+  };
 
   const changeSlide = (direction = 1) => {
     let slideNumber = 0;
@@ -73,7 +78,7 @@ const Slider = function({ newNoteActive, activateNewNoteForm, searchTags }: Slid
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
     >
-      <SlidesList notes={notes} slideNumber={slide} newNoteActive={newNoteActive} activateNewNoteForm={activateNewNoteForm} />
+      <SlidesList handleUpdateNotes={handleUpdateNotes} notes={notes} slideNumber={slide} newNoteActive={newNoteActive} activateNewNoteForm={activateNewNoteForm} />
     </div>
   );
 };
