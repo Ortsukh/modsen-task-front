@@ -9,6 +9,7 @@ import { format } from "date-fns";
 type NoteProps = {
   note: NoteType;
   removeNote: (id: string) => void;
+  handleUpdateTags:() => void;
   handleSecondNoteChangeOrder: (secondNote: NoteType) => void;
   handleFirstNoteChangeOrder: (firstNote: NoteType) => void;
 };
@@ -18,6 +19,7 @@ const Note = ({
   removeNote,
   handleFirstNoteChangeOrder,
   handleSecondNoteChangeOrder,
+  handleUpdateTags
 }: NoteProps) => {
   const [isEdit, setIsEdit] = useState(true);
   const [modalHelper, setModalHelper] = useState(false);
@@ -38,7 +40,8 @@ const Note = ({
 
   useEffect(() => {
     if (noteObject.canUpdate === true) {
-      updateNote(noteObject);
+              
+                updateNote(noteObject).then(()=>  handleUpdateTags())
       setNoteObject((prev) => {
         return {
           ...prev,
@@ -130,11 +133,7 @@ const Note = ({
         }
         if (word.startsWith("#")) {
           setNoteObject((prev) => {
-            console.log(prev);
-            
             if (prev.tags.search(new RegExp(`(^|\\s)${word}(?=\\W|$)`)) < 0) {
-                console.log(word);
-                
               return {
                 ...prev,
                 tags: `${prev.tags} ${word}`.trim(),
@@ -176,15 +175,20 @@ const Note = ({
       .join(splitItem);
   };
 
-  const handleDragStart = (event: any, noteObject: NoteType) => {
+  const handleDragStart = (event: React.DragEvent<HTMLDivElement>, noteObject: NoteType) => {
     handleFirstNoteChangeOrder(noteObject);
+    (event.target as HTMLDivElement).classList.add('note_drag__1tknI')
+    
   };
-
-  const handleDropOver = (event: any) => {
+  const handleDragEnd = (event: React.DragEvent<HTMLDivElement>) => {
+    (event.target as HTMLDivElement).classList.remove('note_drag__1tknI')
+    
+  };
+  const handleDropOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
 
-  const handleDragDrop = (event: any, secondNoteObject: NoteType) => {
+  const handleDragDrop = (event: React.DragEvent<HTMLDivElement>, secondNoteObject: NoteType) => {
     event.preventDefault();
     handleSecondNoteChangeOrder(secondNoteObject);
   };
@@ -221,6 +225,7 @@ const Note = ({
         onDragStart={(e) => handleDragStart(e, noteObject)}
         onDrop={(e) => handleDragDrop(e, noteObject)}
         onDragOver={handleDropOver}
+        onDragEnd={handleDragEnd}
         onMouseOver={handleMouseOver}
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
@@ -253,7 +258,6 @@ const Note = ({
                   };
                 });
                 timeChangeHandler();
-                setCanUpdate(true);
               }
             }}
           >

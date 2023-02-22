@@ -13,6 +13,7 @@ export default function Slide({ note } : {note: NoteType}) {
           removeNote={()=>{}}
           handleFirstNoteChangeOrder={()=>{}}
           handleSecondNoteChangeOrder={()=>{}}
+          handleUpdateTags={()=>{}}
     />
     </div>
   );

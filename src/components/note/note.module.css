@@ -127,7 +127,9 @@
   margin-right: 5px;
   cursor: pointer;
 }
-
+.drag {
+    background-color: #858585;
+}
 @media (max-width: 360px) {
   .note {
     margin-right: 0;
