@@ -154,6 +154,7 @@ const Note = ({
       return {
         ...prev,
         tags: prev.tags.replace(event.target.textContent, ""),
+        canUpdate: true,
       };
     });
   };
