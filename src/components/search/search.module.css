@@ -31,7 +31,9 @@
   overflow: auto;
   margin-bottom: 30px;
 }
-
+.tags_title {
+  margin-bottom: 10px;
+}
 .tag {
   height: 30px;
   margin-left: 13px;

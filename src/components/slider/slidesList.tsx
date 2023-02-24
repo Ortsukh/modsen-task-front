@@ -9,7 +9,7 @@ type SliderProps = {
   notes: Array<NoteType>;
   slideNumber: number;
   newNoteActive: boolean;
-  handleUpdateNotes: () => void
+  handleUpdateNotes: () => void;
   activateNewNoteForm: (status: boolean) => void;
 };
 
@@ -27,7 +27,7 @@ export default function SlidesList({
     >
       {newNoteActive && (
         <NewNote
-        handleUpdateNotes={handleUpdateNotes}
+          handleUpdateNotes={handleUpdateNotes}
           onChangeActiveNewForm={activateNewNoteForm}
           color={notes.length > 1 ? notes[notes.length - 1].color : "blue"}
         />
