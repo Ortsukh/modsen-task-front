@@ -7,19 +7,21 @@ type TagsProps = {
 };
 
 const AllTags = ({ tags }: TagsProps) => {
-  console.log(tags);
-  
   return (
     <>
-      {tags.length > 0 && <div className={styles.tags_title}>All tags</div>}
-    {tags.length > 0 &&
-    <div className={styles.tags}>
-      {tags.map((tag, index) => (
-        <span className={styles.tag} key={index}>
-          {tag}
-        </span>
-      ))}
-    </div>}
+      {tags.length > 0 && (
+        <div>
+          <div className={styles.tags_title}>All tags</div>
+
+          <div className={styles.tags}>
+            {tags.map((tag, index) => (
+              <span className={styles.tag} key={index}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 };
