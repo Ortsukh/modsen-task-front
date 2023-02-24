@@ -17,7 +17,6 @@
   top: 377px;
   display: flex;
   justify-content: center;
-
 }
 
 .link_note {
@@ -64,11 +63,11 @@
   align-items: center;
   justify-content: center;
 
-  font-family: 'Oswald';
-font-style: normal;
-font-weight: 400;
-font-size: 55px;
-line-height: 107px;
-letter-spacing: 0.05em;
-text-transform: uppercase;
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 55px;
+  line-height: 107px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }

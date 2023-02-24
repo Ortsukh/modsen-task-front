@@ -28,7 +28,7 @@
   height: 60px;
   display: flex;
   justify-content: space-between;
-  overflow-x: scroll;
+  overflow: auto;
   margin-bottom: 30px;
 }
 
