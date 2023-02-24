@@ -10,7 +10,7 @@ const ModalHelperDiv = styled.div<{ left: number; top: number }>`
   width: 224px;
   height: 29px;
   left: ${(props) => props.left + 15 + "px"};
-  top: ${(props) => props.top + 30 + "px"};
+  top: ${(props) => props.top + 15 + "px"};
   position: absolute;
   background: rgba(1, 1, 1, 0.75);
   border-radius: 1px 8px 2px;
