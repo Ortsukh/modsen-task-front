@@ -60,4 +60,15 @@
 }
 .content {
   min-height: calc(100vh - 46px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: 'Oswald';
+font-style: normal;
+font-weight: 400;
+font-size: 55px;
+line-height: 107px;
+letter-spacing: 0.05em;
+text-transform: uppercase;
 }
