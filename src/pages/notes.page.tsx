@@ -15,7 +15,11 @@ import Search from "../components/search/search";
 import { NoteType } from "../support/types";
 import AllTags from "../components/search/allTags";
 
-const NotesPage = () => {
+type ScreenProps = {
+  activeScreen:(screen: string) => void;
+};
+
+const NotesPage = ({activeScreen}: ScreenProps) => {
   const [notes, setNotes] = useState<NoteType[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [newNoteActive, setNewNoteActive] = useState(false);
@@ -35,11 +39,18 @@ const NotesPage = () => {
   ] = useState<NoteType | null>();
 
   useEffect(() => {
+    setIsLoading(true);
     if (updateTags === true) {
       getAllTags().then((data) => setTags(data));
       setUpdateTags(false);
     }
+    setIsLoading(false);
+
   }, [updateTags]);
+
+  useEffect(() => {
+    activeScreen('notes')
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);

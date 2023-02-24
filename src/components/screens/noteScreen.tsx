@@ -4,7 +4,6 @@ import Search from "../search/search";
 import Slider from "../slider/slider";
 import styles from "./homeScreen.module.css";
 
-
 const NotesScreen = () => {
   const [newNoteActive, setNewNoteActive] = useState(false);
   const [menuActive, setMenuActive] = useState(false);

@@ -13,7 +13,7 @@ function App() {
   const changePage = (screen: string) => {
     setActiveScreen(screen);
   };
-  
+
   const isSmallScreen = useMediaQuery({
     query: "(max-width: 360px)",
   });
@@ -38,8 +38,8 @@ function App() {
           <Header onClick={changePage} activeScreen={activeScreen} />
 
           <Routes>
-            <Route path="/home" element={<WelcomePage />} />
-            <Route path="/notes" element={<NotesPage />} />
+            <Route path="/home" element={<WelcomePage activeScreen={changePage}/>}  />
+            <Route path="/notes" element={<NotesPage activeScreen={changePage}/>} />
           </Routes>
         </Router>
       )}
