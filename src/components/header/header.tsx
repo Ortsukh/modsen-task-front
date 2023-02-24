@@ -3,24 +3,24 @@ import { Link } from "react-router-dom";
 import styles from "./header.module.css";
 
 type HeaderProps = {
-  onClick: (isHome: boolean) => void;
-  isHomeActivate: boolean;
+  onClick: (activeScreen: string) => void;
+  activeScreen: string;
 };
 
-const Header = ({ onClick, isHomeActivate }: HeaderProps) => {
+const Header = ({ onClick, activeScreen }: HeaderProps) => {
   return (
     <div className={styles.header}>
       <Link
-        className={`${styles.link} ${isHomeActivate ? styles.active : ""}`}
+        className={`${styles.link} ${activeScreen === 'home' ? styles.active : ""}`}
         to="/home"
-        onClick={() => onClick(true)}
+        onClick={() => onClick('home')}
       >
         Home
       </Link>
       <Link
-        className={`${styles.link} ${isHomeActivate ? "" : styles.active}`}
+        className={`${styles.link} ${activeScreen === "notes" ? styles.active : ""}`}
         to="/notes"
-        onClick={() => onClick(false)}
+        onClick={() => onClick('notes')}
       >
         Notes
       </Link>

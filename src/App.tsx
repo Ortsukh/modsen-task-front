@@ -8,11 +8,12 @@ import HomeScreen from "./components/screens/homeScreen";
 import NotesScreen from "./components/screens/noteScreen";
 
 function App() {
-  const [isHomeActivate, setIsHomeActivate] = useState(true);
+  const [activeScreen, setActiveScreen] = useState("none");
 
-  const changePage = (isHome: boolean) => {
-    setIsHomeActivate(isHome);
+  const changePage = (screen: string) => {
+    setActiveScreen(screen);
   };
+  
   const isSmallScreen = useMediaQuery({
     query: "(max-width: 360px)",
   });
@@ -34,7 +35,7 @@ function App() {
 
       {isDesktopOrLaptop && (
         <Router>
-          <Header onClick={changePage} isHomeActivate={isHomeActivate} />
+          <Header onClick={changePage} activeScreen={activeScreen} />
 
           <Routes>
             <Route path="/home" element={<WelcomePage />} />
