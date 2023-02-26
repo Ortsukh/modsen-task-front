@@ -1,29 +1,38 @@
 import React, { useEffect, useState } from "react";
 
 import SlidesList from "./slidesList";
-import { getAllNotes, getNotesByTags } from "../../support/api-bff";
+import { getAllNotes, getNotesByTags, removeNoteById } from "../../support/api-bff";
 import styles from "./slider.module.css";
 import { NoteType } from "../../support/types";
+import Search from "../search/search";
+import ModalContextMenu from "../modals/modalContextMenu";
 
 type SliderProps = {
   newNoteActive: boolean;
   activateNewNoteForm: (status: boolean) => void;
-  searchTags: string
+  menuActive: boolean;
 };
 
-const Slider = function({ newNoteActive, activateNewNoteForm, searchTags }: SliderProps) {
+const Slider = function({
+  newNoteActive,
+  activateNewNoteForm,
+  menuActive,
+}: SliderProps) {
   const [notes, setNotes] = useState<NoteType[]>([]);
   const [slide, setSlide] = useState(0);
   const [touchPosition, setTouchPosition] = useState(null);
   const [updateNotes, setUpdateNotes] = useState(false);
+  const [upgradeColor, setUpgradeColor] = useState(false);
 
-  useEffect(() => {
-    getNotesByTags(searchTags).then((data) => setNotes(data));
-}, [searchTags]);
+  const filterNotesByTag = (tag: string) => {
+    getNotesByTags(tag)
+      .then((data) => setNotes(data))
+      .catch(() => {});
+  };
 
   useEffect(() => {
     getAllNotes().then((data) => setNotes(data));
-  }, [newNoteActive]);
+  }, [updateNotes]);
 
   const handleUpdateNotes = () => {
     setUpdateNotes((prev) => !prev);
@@ -41,13 +50,11 @@ const Slider = function({ newNoteActive, activateNewNoteForm, searchTags }: Slid
     setSlide(slideNumber);
   };
 
- useEffect(()=>{
-    setSlide(0)
- },[newNoteActive])
-
+  useEffect(() => {
+    setSlide(0);
+  }, [newNoteActive]);
 
   const handleTouchStart = (e: any) => {
-
     const touchDown = e.touches[0].clientX;
 
     setTouchPosition(touchDown);
@@ -72,14 +79,57 @@ const Slider = function({ newNoteActive, activateNewNoteForm, searchTags }: Slid
     setTouchPosition(null);
   };
 
+  const removeNote = (id: string) => {
+    removeNoteById(id);
+    setNotes((prev) => prev.filter((note) => note.id !== id));
+  };
+
+  const colorChangeHandler = (
+    color: "blue" | "pink" | "orange" | "yellow" | "green" | "violet"
+  ) => {
+    setNotes((prev) => {
+      return prev.map((note, index) => {
+        if (index === slide) {
+          return {
+            ...note,
+            color: color,
+          };
+        }
+        return note;
+      });
+    });
+    setUpgradeColor(true)
+  };
+
   return (
-    <div
-      className={styles.slider}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-    >
-      <SlidesList handleUpdateNotes={handleUpdateNotes} notes={notes} slideNumber={slide} newNoteActive={newNoteActive} activateNewNoteForm={activateNewNoteForm} />
-    </div>
+    <>
+      <div
+        className={styles.slider}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+      >
+        <SlidesList
+          handleUpdateNotes={handleUpdateNotes}
+          notes={notes}
+          slideNumber={slide}
+          newNoteActive={newNoteActive}
+          activateNewNoteForm={activateNewNoteForm}
+        />
+      </div>
+      {menuActive && (
+        <div className={styles.menu}>
+          <Search filterNotesByTag={filterNotesByTag} />
+          <ModalContextMenu
+            left={"20"}
+            top={"100"}
+            id={notes[slide].id}
+            closeContextMenu={() => {}}
+            colorChangeHandler={colorChangeHandler}
+            removeNote={removeNote}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

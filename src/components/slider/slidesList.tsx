@@ -20,6 +20,7 @@ export default function SlidesList({
   newNoteActive,
   activateNewNoteForm,
 }: SliderProps) {
+    
   return (
     <div
       className={styles.slide_list}
@@ -33,8 +34,8 @@ export default function SlidesList({
         />
       )}
 
-      {notes.map((slide, index) => (
-        <Slide key={index} note={slide} />
+      {notes.map((slide) => (
+        <Slide key={slide.id} note={slide} />
       ))}
     </div>
   );

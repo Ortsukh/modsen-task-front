@@ -27,7 +27,7 @@
   width: 343px;
   height: 60px;
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   overflow: auto;
   margin-bottom: 30px;
 }
@@ -46,6 +46,7 @@
   border: 1px solid grey;
   border-radius: 15px;
   padding: 0 5px;
+  margin-right: 10px;
 }
 
 @media (max-width: 360px) {

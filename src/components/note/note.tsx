@@ -22,6 +22,8 @@ const Note = ({
   handleSecondNoteChangeOrder,
   handleUpdateTags,
 }: NoteProps) => {
+  console.log(note);
+
   const [isEdit, setIsEdit] = useState(true);
   const [modalHelper, setModalHelper] = useState(false);
   const [noteObject, setNoteObject] = useState(note);
@@ -30,6 +32,10 @@ const Note = ({
     posX: 0,
     posY: 0,
   });
+
+  useEffect(() => {
+    setNoteObject({ ...note, canUpdate: true });
+  }, [note]);
 
   const [contextMenu, setContextMenu] = useState({
     isActive: false,

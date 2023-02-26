@@ -74,11 +74,9 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
   }, [canSwapNote]);
 
   const filterNotesByTag = (tag: string) => {
-    try {
-      getNotesByTags(tag).then((data) => setNotes(data));
-    } catch (error) {
-      setIsError(true);
-    }
+    getNotesByTags(tag)
+      .then((data) => setNotes(data))
+      .catch(() => setIsError(true));
   };
 
   const handleUpdateNotes = () => {
