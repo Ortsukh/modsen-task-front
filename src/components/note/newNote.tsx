@@ -5,6 +5,7 @@ import { createNote } from "../../support/api-bff";
 import { NoteType } from "../../support/types";
 import ModalContextMenu from "../modals/modalContextMenu";
 import styles from "./note.module.css";
+import NoteForm from "./noteForm";
 
 export type NoteProps = {
   handleUpdateNotes: () => void;
@@ -33,6 +34,10 @@ const NewNote = ({
     left: "",
   });
 
+  const saveNewNode = () => {
+    setCanCreate(true);
+  };
+
   const openContextMenu = (event: any) => {
     event.preventDefault();
     setContextMenu({
@@ -59,11 +64,11 @@ const NewNote = ({
     }
   }, [canCreate]);
 
-  const titleChangeHandler = (event: any) => {
+  const titleChangeHandler = (value: string) => {
     setNoteObject((prev) => {
       return {
         ...prev,
-        title: event.target.value,
+        title: value,
       };
     });
   };
@@ -88,92 +93,54 @@ const NewNote = ({
     });
   };
 
-  const findAndRemoveHashtag = (
-    description: string,
-    splitItem: string
-  ): string => {
-    return description
-      .split(splitItem)
-      .map((word) => {
-        if (word.includes("\n")) {
-          return findAndRemoveHashtag(word, "\n");
-        }
-        if (word.startsWith("#")) {
-          setNoteObject((prev) => {
-            if (prev.tags.search(new RegExp(`(^|\\s)${word}(?=\\W|$)`)) < 0) {
-              return {
-                ...prev,
-                tags: `${prev.tags} ${word}`,
-              };
-            }
-            return prev;
-          });
-          return word.slice(1);
-        }
-        return word;
-      })
-      .join(splitItem);
+  const tagsChangeHandler = (word: string) => {
+    setNoteObject((prev) => {
+      if (prev.tags.search(new RegExp(`(^|\\s)${word}(?=\\W|$)`)) < 0) {
+        return {
+          ...prev,
+          tags: `${prev.tags} ${word}`.trim(),
+          canUpdate: true,
+        };
+      }
+      return prev;
+    });
   };
 
-  const descriptionChangeHandler = (event: any) => {
+  const descriptionChangeHandler = (value: string) => {
     setNoteObject((prev) => {
       return {
         ...prev,
-        description: event.target.value,
+        description: value,
       };
     });
   };
+
   return (
     <div
       className={`${styles.note} ${styles[noteObject.color]}`}
       onContextMenu={openContextMenu}
     >
-      <div
-        onBlur={(e) => {
-          if (contextMenu.isActive) return;
-          if (!e.currentTarget.contains(e.relatedTarget)) {
-            timeChangeHandler();
-            setNoteObject((prev) => {
-              return {
-                ...prev,
-                description: findAndRemoveHashtag(noteObject.description, " "),
-              };
-            });
-            setCanCreate(true);
-          }
-        }}
-      >
-        <input
-          className={styles.note_title}
-          value={noteObject.title}
-          autoFocus
-          onChange={titleChangeHandler}
+      <NoteForm
+        note={noteObject}
+        isNewNote={true}
+        tagsChangeHandler={tagsChangeHandler}
+        contextMenu={contextMenu.isActive}
+        descriptionChangeHandler={descriptionChangeHandler}
+        titleChangeHandler={titleChangeHandler}
+        timeChangeHandler={timeChangeHandler}
+        activateEditForm={() => {}}
+        saveUpdatedNode={saveNewNode}
+      />
+      {contextMenu.isActive && (
+        <ModalContextMenu
+          left={contextMenu.left}
+          top={contextMenu.top}
+          id={noteObject.id}
+          closeContextMenu={closeContextMenu}
+          colorChangeHandler={colorChangeHandler}
+          removeNote={() => console.log(true)}
         />
-        <textarea
-          wrap="hard"
-          cols={45}
-          className={styles.note_description}
-          value={noteObject.description}
-          onChange={descriptionChangeHandler}
-        />
-        <span className={styles.note_time}>
-          {
-            <div className={styles.note_time}>
-              {format(new Date(), "yyyy-MM-dd").toLocaleString()}
-            </div>
-          }
-        </span>
-        {contextMenu.isActive && (
-          <ModalContextMenu
-            left={contextMenu.left}
-            top={contextMenu.top}
-            id={noteObject.id}
-            closeContextMenu={closeContextMenu}
-            colorChangeHandler={colorChangeHandler}
-            removeNote={() => console.log(true)}
-          />
-        )}
-      </div>
+      )}
     </div>
   );
 };

@@ -5,11 +5,12 @@ import ModalContextMenu from "../modals/modalContextMenu";
 import ModalHelper from "../modals/modalHelper";
 import styles from "./note.module.css";
 import { format } from "date-fns";
+import NoteForm from "./noteForm";
 
 type NoteProps = {
   note: NoteType;
   removeNote: (id: string) => void;
-  handleUpdateTags:() => void;
+  handleUpdateTags: () => void;
   handleSecondNoteChangeOrder: (secondNote: NoteType) => void;
   handleFirstNoteChangeOrder: (firstNote: NoteType) => void;
 };
@@ -19,7 +20,7 @@ const Note = ({
   removeNote,
   handleFirstNoteChangeOrder,
   handleSecondNoteChangeOrder,
-  handleUpdateTags
+  handleUpdateTags,
 }: NoteProps) => {
   const [isEdit, setIsEdit] = useState(true);
   const [modalHelper, setModalHelper] = useState(false);
@@ -36,12 +37,9 @@ const Note = ({
     left: "",
   });
 
-  const [canUpdate, setCanUpdate] = useState(false);
-
   useEffect(() => {
     if (noteObject.canUpdate === true) {
-              
-                updateNote(noteObject).then(()=>  handleUpdateTags())
+      updateNote(noteObject).then(() => handleUpdateTags());
       setNoteObject((prev) => {
         return {
           ...prev,
@@ -60,15 +58,24 @@ const Note = ({
     }
   }, [mousePosition]);
 
-  const activateEditForm = (status: boolean, data?: any) => {
+  const activateEditForm = (status: boolean) => {
     setIsEdit(status);
   };
 
-  const titleChangeHandler = (event: any) => {
+  const saveUpdatedNode = () => {
     setNoteObject((prev) => {
       return {
         ...prev,
-        title: event.target.value,
+        canUpdate: true,
+      };
+    });
+  };
+
+  const titleChangeHandler = (value: string) => {
+    setNoteObject((prev) => {
+      return {
+        ...prev,
+        title: value,
       };
     });
   };
@@ -92,14 +99,13 @@ const Note = ({
         canUpdate: true,
       };
     });
-    setCanUpdate(true);
   };
 
-  const descriptionChangeHandler = (event: any) => {
+  const descriptionChangeHandler = (value: string) => {
     setNoteObject((prev) => {
       return {
         ...prev,
-        description: event.target.value,
+        description: value,
       };
     });
   };
@@ -121,32 +127,17 @@ const Note = ({
     });
   };
 
-  const findAndRemoveHashtag = (
-    description: string,
-    splitItem: string
-  ): string => {
-    return description
-      .split(splitItem)
-      .map((word) => {
-        if (word.includes("\n")) {
-          return findAndRemoveHashtag(word, "\n");
-        }
-        if (word.startsWith("#")) {
-          setNoteObject((prev) => {
-            if (prev.tags.search(new RegExp(`(^|\\s)${word}(?=\\W|$)`)) < 0) {
-              return {
-                ...prev,
-                tags: `${prev.tags} ${word}`.trim(),
-                canUpdate: true,
-              };
-            }
-            return prev;
-          });
-          return word.slice(1);
-        }
-        return word;
-      })
-      .join(splitItem);
+  const tagsChangeHandler = (word: string) => {
+    setNoteObject((prev) => {
+      if (prev.tags.search(new RegExp(`(^|\\s)${word}(?=\\W|$)`)) < 0) {
+        return {
+          ...prev,
+          tags: `${prev.tags} ${word}`.trim(),
+          canUpdate: true,
+        };
+      }
+      return prev;
+    });
   };
 
   const removeTag = (event: any) => {
@@ -176,20 +167,24 @@ const Note = ({
       .join(splitItem);
   };
 
-  const handleDragStart = (event: React.DragEvent<HTMLDivElement>, noteObject: NoteType) => {
+  const handleDragStart = (
+    event: React.DragEvent<HTMLDivElement>,
+    noteObject: NoteType
+  ) => {
     handleFirstNoteChangeOrder(noteObject);
-    (event.target as HTMLDivElement).classList.add('note_drag__1tknI')
-    
+    (event.target as HTMLDivElement).classList.add("note_drag__1tknI");
   };
   const handleDragEnd = (event: React.DragEvent<HTMLDivElement>) => {
-    (event.target as HTMLDivElement).classList.remove('note_drag__1tknI')
-    
+    (event.target as HTMLDivElement).classList.remove("note_drag__1tknI");
   };
   const handleDropOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
 
-  const handleDragDrop = (event: React.DragEvent<HTMLDivElement>, secondNoteObject: NoteType) => {
+  const handleDragDrop = (
+    event: React.DragEvent<HTMLDivElement>,
+    secondNoteObject: NoteType
+  ) => {
     event.preventDefault();
     handleSecondNoteChangeOrder(secondNoteObject);
   };
@@ -205,13 +200,13 @@ const Note = ({
     });
   };
 
-  const handleMouseEnter = (event: any) => {
+  const handleMouseEnter = () => {
     setMousePosition((prev) => {
       return { ...prev, mouseInNote: true };
     });
   };
 
-  const handleMouseLeave = (event: any) => {
+  const handleMouseLeave = () => {
     setMousePosition((prev) => {
       return { ...prev, mouseInNote: false };
     });
@@ -243,39 +238,17 @@ const Note = ({
             ></div>
           </div>
         ) : (
-          <div
-            onBlur={(e) => {
-              if (contextMenu.isActive) return;
-
-              if (!e.currentTarget.contains(e.relatedTarget)) {
-                activateEditForm(true);
-                setNoteObject((prev) => {
-                  return {
-                    ...prev,
-                    description: findAndRemoveHashtag(
-                      noteObject.description,
-                      " "
-                    ),
-                  };
-                });
-                timeChangeHandler();
-              }
-            }}
-          >
-            <input
-              className={styles.note_title}
-              value={noteObject.title}
-              autoFocus
-              onChange={titleChangeHandler}
-            />
-            <textarea
-              wrap="hard"
-              cols={45}
-              className={styles.note_description}
-              value={noteObject.description}
-              onChange={descriptionChangeHandler}
-            />
-          </div>
+          <NoteForm
+            isNewNote={false}
+            note={noteObject}
+            tagsChangeHandler={tagsChangeHandler}
+            contextMenu={contextMenu.isActive}
+            descriptionChangeHandler={descriptionChangeHandler}
+            titleChangeHandler={titleChangeHandler}
+            timeChangeHandler={timeChangeHandler}
+            activateEditForm={activateEditForm}
+            saveUpdatedNode={saveUpdatedNode}
+          />
         )}
 
         <div className={styles.note_time}>

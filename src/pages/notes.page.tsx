@@ -16,10 +16,10 @@ import { NoteType } from "../support/types";
 import AllTags from "../components/search/allTags";
 
 type ScreenProps = {
-  activeScreen:(screen: string) => void;
+  activeScreen: (screen: string) => void;
 };
 
-const NotesPage = ({activeScreen}: ScreenProps) => {
+const NotesPage = ({ activeScreen }: ScreenProps) => {
   const [notes, setNotes] = useState<NoteType[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [newNoteActive, setNewNoteActive] = useState(false);
@@ -27,6 +27,7 @@ const NotesPage = ({activeScreen}: ScreenProps) => {
   const [updateNotes, setUpdateNotes] = useState(false);
   const [updateTags, setUpdateTags] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const [
     firstNoteOrderChange,
@@ -41,23 +42,27 @@ const NotesPage = ({activeScreen}: ScreenProps) => {
   useEffect(() => {
     setIsLoading(true);
     if (updateTags === true) {
-      getAllTags().then((data) => setTags(data));
-      setUpdateTags(false);
+      getAllTags()
+        .then((data) => {
+          setTags(data);
+          setIsLoading(false);
+        })
+        .catch(() => setIsError(true));
     }
-    setIsLoading(false);
-
   }, [updateTags]);
 
   useEffect(() => {
-    activeScreen('notes')
+    activeScreen("notes");
   }, []);
 
   useEffect(() => {
     setIsLoading(true);
-    getAllNotes().then((data) => {
-      setNotes(data);
-      setIsLoading(false);
-    });
+    getAllNotes()
+      .then((data) => {
+        setNotes(data);
+        setIsLoading(false);
+      })
+      .catch(() => setIsError(true));
   }, [updateNotes]);
 
   useEffect(() => {
@@ -69,7 +74,11 @@ const NotesPage = ({activeScreen}: ScreenProps) => {
   }, [canSwapNote]);
 
   const filterNotesByTag = (tag: string) => {
-    getNotesByTags(tag).then((data) => setNotes(data));
+    try {
+      getNotesByTags(tag).then((data) => setNotes(data));
+    } catch (error) {
+      setIsError(true);
+    }
   };
 
   const handleUpdateNotes = () => {
@@ -106,37 +115,44 @@ const NotesPage = ({activeScreen}: ScreenProps) => {
   };
 
   return (
-    <div className={styles.notes_page}>
-      <Search filterNotesByTag={filterNotesByTag} />
+    <>
+      {!isError && (
+        <div className={styles.notes_page}>
+          <Search filterNotesByTag={filterNotesByTag} />
 
-      <AllTags tags={tags} />
+          <AllTags tags={tags} />
 
-      {!isLoading && (
-        <div className={styles.notes}>
-          <NoteEmpty onClick={() => activateNewNoteForm(true)} />
+          {!isLoading && (
+            <div className={styles.notes}>
+              <NoteEmpty onClick={() => activateNewNoteForm(true)} />
 
-          {notes.map((note: NoteType) => (
-            <Note
-              note={note}
-              key={note.id}
-              removeNote={removeNote}
-              handleFirstNoteChangeOrder={handleFirstNoteChangeOrder}
-              handleSecondNoteChangeOrder={handleSecondNoteChangeOrder}
-              handleUpdateTags={handleUpdateTags}
-            />
-          ))}
+              {notes.map((note: NoteType) => (
+                <Note
+                  note={note}
+                  key={note.id}
+                  removeNote={removeNote}
+                  handleFirstNoteChangeOrder={handleFirstNoteChangeOrder}
+                  handleSecondNoteChangeOrder={handleSecondNoteChangeOrder}
+                  handleUpdateTags={handleUpdateTags}
+                />
+              ))}
 
-          {newNoteActive && (
-            <NewNote
-              handleUpdateNotes={handleUpdateNotes}
-              onChangeActiveNewForm={activateNewNoteForm}
-              color={notes.length > 1 ? notes[notes.length - 1].color : "blue"}
-            />
+              {newNoteActive && (
+                <NewNote
+                  handleUpdateNotes={handleUpdateNotes}
+                  onChangeActiveNewForm={activateNewNoteForm}
+                  color={
+                    notes.length > 1 ? notes[notes.length - 1].color : "blue"
+                  }
+                />
+              )}
+            </div>
           )}
+          {isLoading && <div>Loading...</div>}
         </div>
       )}
-      {isLoading && <div>loading...</div>}
-    </div>
+      {isError && <div>Something went wrong. Sorry!</div>}
+    </>
   );
 };
 

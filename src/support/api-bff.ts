@@ -1,18 +1,21 @@
 import { BaseNoteType, NoteType } from "./types";
-import dotenv from 'dotenv'
+import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 
-const backendUrl = process.env.REACT_APP_BACKEND_URL
+const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 export async function getAllNotes() {
-  
   const str = `${backendUrl}notes`;
   let res = await fetch(str, {
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
   });
+
+  if (!res.ok) {
+    throw new Error("Something went wrong.Sorry");
+  }
 
   return await res.json();
 }
@@ -24,6 +27,10 @@ export async function getAllTags() {
       "Content-Type": "application/json;charset=utf-8",
     },
   });
+
+  if (!res.ok) {
+    throw new Error("Something went wrong.Sorry");
+  }
 
   return await res.json();
 }
