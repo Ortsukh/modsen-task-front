@@ -70,16 +70,18 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
     activeScreen("notes");
   }, []);
 
- useEffect(() => {
-    setIsLoading(true);
-    getPageNotes(page)
-      .then((data) => {
-        setNotes((prev) => [...prev, ...data.notes]);
-        setCountNotes(data.count);
-        setIsLoading(false);
-      })
-      .catch(() => setIsError(true));
-      setUpdateNotes(false)
+  useEffect(() => {
+    if (page > 2) {
+      setIsLoading(true);
+      getPageNotes(page)
+        .then((data) => {
+          setNotes((prev) => [...prev, ...data.notes]);
+          setCountNotes(data.count);
+          setIsLoading(false);
+        })
+        .catch(() => setIsError(true));
+      setUpdateNotes(false);
+    }
   }, [page]);
 
   useEffect(() => {
@@ -92,12 +94,10 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
       .catch(() => setIsError(true));
   }, [updateNotes]);
 
- 
-
   useEffect(() => {
     if (canSwapNote === true && firstNoteOrderChange && secondNoteOrderChange) {
       changeNoteOrder(firstNoteOrderChange, secondNoteOrderChange);
-      handleUpdateTags()
+      handleUpdateTags();
       setCanSwapNote(false);
     }
   }, [canSwapNote]);
@@ -150,7 +150,6 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
       if (page * 5 < countNotes) setPage((prev) => prev + 1);
     }
   };
-console.log(notes);
 
   return (
     <>
