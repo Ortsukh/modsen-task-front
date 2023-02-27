@@ -168,6 +168,8 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
                   handleFirstNoteChangeOrder={handleFirstNoteChangeOrder}
                   handleSecondNoteChangeOrder={handleSecondNoteChangeOrder}
                   handleUpdateTags={handleUpdateTags}
+                  handleUpdateNotes={handleUpdateNotes}
+                  
                 />
               ))}
 

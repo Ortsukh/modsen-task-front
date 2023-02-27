@@ -3,11 +3,12 @@ import { NoteType } from "../../support/types";
 import Note from "../note/note";
 
 export default function Slide({ note }: { note: NoteType }) {
-  const [note1, setNote] = useState<NoteType>();
+  const [noteObject, setNote] = useState<NoteType>();
 
   useEffect(() => {
     setNote(note);
-  }, [note1]);
+  }, [noteObject]);
+  
   return (
     <div className="slide">
       <Note
@@ -16,6 +17,7 @@ export default function Slide({ note }: { note: NoteType }) {
         handleFirstNoteChangeOrder={() => {}}
         handleSecondNoteChangeOrder={() => {}}
         handleUpdateTags={() => {}}
+        handleUpdateNotes={() => {}}
       />
     </div>
   );
