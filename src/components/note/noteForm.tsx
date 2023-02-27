@@ -29,32 +29,6 @@ const NoteForm = ({
   contextMenu,
   titleChangeHandler,
 }: NoteProps) => {
-  //   const titleChangeHandler = (event: any) => {
-  //     setNoteObject((prev) => {
-  //       return {
-  //         ...prev,
-  //         title: event.target.value,
-  //       };
-  //     });
-  //   };
-
-  //   const timeChangeHandler = () => {
-  //     setNoteObject((prev) => {
-  //       return {
-  //         ...prev,
-  //         updatedDate: new Date().toString(),
-  //       };
-  //     });
-  //   };
-
-  //   const descriptionChangeHandler = (event: any) => {
-  //     setNoteObject((prev) => {
-  //       return {
-  //         ...prev,
-  //         description: event.target.value,
-  //       };
-  //     });
-  //   };
 
   const findAndRemoveHashtag = (
     description: string,

@@ -6,6 +6,7 @@ import ModalHelper from "../modals/modalHelper";
 import styles from "./note.module.css";
 import { format } from "date-fns";
 import NoteForm from "./noteForm";
+import { useGlobalContext } from "../../context/globalContext";
 
 type NoteProps = {
   note: NoteType;
@@ -31,9 +32,12 @@ const Note = ({
     posX: 0,
     posY: 0,
   });
+  const { isMobile } = useGlobalContext()
 
   useEffect(() => {
-    setNoteObject({ ...note, canUpdate: true });
+    if(isMobile){
+      setNoteObject({ ...note, canUpdate: true });
+    }
   }, [note]);
 
   const [contextMenu, setContextMenu] = useState({

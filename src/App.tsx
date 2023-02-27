@@ -6,6 +6,9 @@ import NotesPage from "./pages/notes.page";
 import { useMediaQuery } from "react-responsive";
 import HomeScreen from "./components/screens/homeScreen";
 import NotesScreen from "./components/screens/noteScreen";
+import { MyGlobalContext } from "./context/globalContext";
+
+
 
 function App() {
   const [activeScreen, setActiveScreen] = useState("none");
@@ -25,23 +28,35 @@ function App() {
   return (
     <>
       {isSmallScreen && (
+        <MyGlobalContext.Provider value= {{isMobile:true }}>
         <Router>
           <Routes>
             <Route path="" element={<HomeScreen />} />
             <Route path="/notesScreen" element={<NotesScreen />} />
           </Routes>
         </Router>
+        </MyGlobalContext.Provider>
       )}
 
       {isDesktopOrLaptop && (
+        <MyGlobalContext.Provider value= {{isMobile:false }}>
+
         <Router>
           <Header onClick={changePage} activeScreen={activeScreen} />
 
           <Routes>
-            <Route path="/home" element={<WelcomePage activeScreen={changePage}/>}  />
-            <Route path="/notes" element={<NotesPage activeScreen={changePage}/>} />
+            <Route
+              path="/home"
+              element={<WelcomePage activeScreen={changePage} />}
+            />
+            <Route
+              path="/notes"
+              element={<NotesPage activeScreen={changePage} />}
+            />
           </Routes>
         </Router>
+        </MyGlobalContext.Provider>
+
       )}
     </>
   );

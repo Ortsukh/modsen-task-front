@@ -4,7 +4,6 @@ import NoteEmpty from "../components/note/emptyNote";
 import Note from "../components/note/note";
 import {
   changeOrder,
-  getAllNotes,
   getAllTags,
   getLastNote,
   getNotesByTags,
@@ -30,7 +29,7 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
   const [newNoteActive, setNewNoteActive] = useState(false);
   const [canSwapNote, setCanSwapNote] = useState(false);
   const [updateNotes, setUpdateNotes] = useState(false);
-  const [updateTags, setUpdateTags] = useState(true);
+  const [updateTags, setUpdateTags] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -46,24 +45,20 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
 
   useEffect(() => {
     setIsLoading(true);
-    if (updateTags === true) {
-      getAllTags()
-        .then((data) => {
-          setTags(data);
-          setIsLoading(false);
-        })
-        .catch(() => setIsError(true));
-    }
+    getAllTags()
+      .then((data) => {
+        setTags(data);
+        setIsLoading(false);
+      })
+      .catch(() => setIsError(true));
   }, [updateTags]);
 
   useEffect(() => {
-    if (updateTags === true) {
-      getLastNote()
-        .then((data) => {
-          setLastNote(data[0]);
-        })
-        .catch(() => setIsError(true));
-    }
+    getLastNote()
+      .then((data) => {
+        setLastNote(data[0]);
+      })
+      .catch(() => setIsError(true));
   }, [notes]);
 
   useEffect(() => {
@@ -114,7 +109,7 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
 
   const activateNewNoteForm = (status: boolean) => {
     setNewNoteActive(status);
-    setUpdateTags(true);
+    setUpdateTags((prev) => !prev);
   };
 
   const removeNote = (id: string) => {
@@ -123,7 +118,9 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
   };
 
   const handleUpdateTags = () => {
-    setUpdateTags(true);
+    console.log("set");
+
+    setUpdateTags((prev) => !prev);
   };
 
   const handleFirstNoteChangeOrder = (note: NoteType) => {
