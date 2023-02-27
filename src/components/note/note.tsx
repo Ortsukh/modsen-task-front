@@ -24,7 +24,6 @@ const Note = ({
   handleFirstNoteChangeOrder,
   handleSecondNoteChangeOrder,
   handleUpdateTags,
-  handleUpdateNotes,
 }: NoteProps) => {
 
   const [isEdit, setIsEdit] = useState(true);
@@ -51,9 +50,7 @@ const Note = ({
 
   useEffect(() => {
     if (noteObject.canUpdate === true) {
-      console.log(noteObject);
-      
-      updateNote(noteObject).then(() =>{handleUpdateNotes(); handleUpdateTags()});
+      updateNote(noteObject).then(() =>{ handleUpdateTags()});
       setNoteObject((prev) => {
         return {
           ...prev,
@@ -159,7 +156,7 @@ const Note = ({
     setNoteObject((prev) => {
       return {
         ...prev,
-        tags: prev.tags.replace(` ${event.target.textContent}`, ""),
+        tags: prev.tags.replace(` ${event.target.textContent}`, "").replace(`${event.target.textContent}`, ""),
         canUpdate: true,
       };
     });

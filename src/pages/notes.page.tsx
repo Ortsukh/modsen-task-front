@@ -31,6 +31,7 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
   const [updateNotes, setUpdateNotes] = useState(false);
   const [updateTags, setUpdateTags] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoading1, setIsLoading1] = useState(false);
   const [isError, setIsError] = useState(false);
 
   const [
@@ -44,11 +45,9 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
   ] = useState<NoteType | null>();
 
   useEffect(() => {
-    setIsLoading(true);
     getAllTags()
       .then((data) => {
         setTags(data);
-        setIsLoading(false);
       })
       .catch(() => setIsError(true));
   }, [updateTags]);
