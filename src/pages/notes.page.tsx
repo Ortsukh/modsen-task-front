@@ -70,31 +70,32 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
     activeScreen("notes");
   }, []);
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   getAllNotes()
-  //     .then((data) => {
-  //       setNotes(data);
-  //       setIsLoading(false);
-  //     })
-  //     .catch(() => setIsError(true));
-  // }, [updateNotes]);
-
   useEffect(() => {
     setIsLoading(true);
-    getPageNotes(page)
+    getAllNotes()
       .then((data) => {
-        setNotes((prev) => [...prev, ...data.notes]);
-        setCountNotes(data.count);
+        setNotes(data);
         setIsLoading(false);
       })
       .catch(() => setIsError(true));
-  }, [updateNotes, page]);
+  }, [updateNotes]);
+
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   getPageNotes(page)
+  //     .then((data) => {
+  //       setNotes((prev) => [...prev, ...data.notes]);
+  //       setCountNotes(data.count);
+  //       setIsLoading(false);
+  //     })
+  //     .catch(() => setIsError(true));
+  //     setUpdateNotes(false)
+  // }, [updateNotes, page]);
 
   useEffect(() => {
     if (canSwapNote === true && firstNoteOrderChange && secondNoteOrderChange) {
       changeNoteOrder(firstNoteOrderChange, secondNoteOrderChange);
-
+      handleUpdateTags()
       setCanSwapNote(false);
     }
   }, [canSwapNote]);
@@ -137,7 +138,6 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
       setUpdateNotes((prev) => !prev)
     );
   };
-  console.log(lastNote);
 
   const onScroll = (event: any) => {
     const scrollLeft = event.currentTarget.scrollLeft;
