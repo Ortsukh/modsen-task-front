@@ -6,7 +6,9 @@ import {
   changeOrder,
   getAllNotes,
   getAllTags,
+  getLastNote,
   getNotesByTags,
+  getPageNotes,
   removeNoteById,
 } from "../support/api-bff";
 import styles from "./styles/notes.page.module.css";
@@ -21,7 +23,10 @@ type ScreenProps = {
 
 const NotesPage = ({ activeScreen }: ScreenProps) => {
   const [notes, setNotes] = useState<NoteType[]>([]);
+  const [lastNote, setLastNote] = useState<NoteType>();
   const [tags, setTags] = useState<string[]>([]);
+  const [page, setPage] = useState(1);
+  const [countNotes, setCountNotes] = useState(0);
   const [newNoteActive, setNewNoteActive] = useState(false);
   const [canSwapNote, setCanSwapNote] = useState(false);
   const [updateNotes, setUpdateNotes] = useState(false);
@@ -52,18 +57,39 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
   }, [updateTags]);
 
   useEffect(() => {
+    if (updateTags === true) {
+      getLastNote()
+        .then((data) => {
+          setLastNote(data[0]);
+        })
+        .catch(() => setIsError(true));
+    }
+  }, [notes]);
+
+  useEffect(() => {
     activeScreen("notes");
   }, []);
 
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   getAllNotes()
+  //     .then((data) => {
+  //       setNotes(data);
+  //       setIsLoading(false);
+  //     })
+  //     .catch(() => setIsError(true));
+  // }, [updateNotes]);
+
   useEffect(() => {
     setIsLoading(true);
-    getAllNotes()
+    getPageNotes(page)
       .then((data) => {
-        setNotes(data);
+        setNotes((prev) => [...prev, ...data.notes]);
+        setCountNotes(data.count);
         setIsLoading(false);
       })
       .catch(() => setIsError(true));
-  }, [updateNotes]);
+  }, [updateNotes, page]);
 
   useEffect(() => {
     if (canSwapNote === true && firstNoteOrderChange && secondNoteOrderChange) {
@@ -111,6 +137,17 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
       setUpdateNotes((prev) => !prev)
     );
   };
+  console.log(lastNote);
+
+  const onScroll = (event: any) => {
+    const scrollLeft = event.currentTarget.scrollLeft;
+    const scrollWidth = event.currentTarget.scrollWidth;
+    const clientWidth = event.currentTarget.clientWidth;
+
+    if (scrollLeft + clientWidth >= scrollWidth - 100) {
+      if (page * 5 < countNotes) setPage((prev) => prev + 1);
+    }
+  };
 
   return (
     <>
@@ -121,7 +158,7 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
           <AllTags tags={tags} />
 
           {!isLoading && (
-            <div className={styles.notes}>
+            <div className={styles.notes} onScroll={onScroll}>
               <NoteEmpty onClick={() => activateNewNoteForm(true)} />
 
               {notes.map((note: NoteType) => (
@@ -139,9 +176,7 @@ const NotesPage = ({ activeScreen }: ScreenProps) => {
                 <NewNote
                   handleUpdateNotes={handleUpdateNotes}
                   onChangeActiveNewForm={activateNewNoteForm}
-                  color={
-                    notes.length > 1 ? notes[notes.length - 1].color : "blue"
-                  }
+                  color={lastNote ? lastNote.color : "blue"}
                 />
               )}
             </div>

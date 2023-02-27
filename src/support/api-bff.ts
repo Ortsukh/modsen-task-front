@@ -20,6 +20,36 @@ export async function getAllNotes() {
   return await res.json();
 }
 
+export async function getPageNotes(page: number) {
+  const str = `${backendUrl}notes/page?page=${page}`;
+  let res = await fetch(str, {
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Something went wrong.Sorry");
+  }
+
+  return await res.json();
+}
+
+export async function getLastNote() {
+  const str = `${backendUrl}notes/last`;
+  let res = await fetch(str, {
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Something went wrong.Sorry");
+  }
+
+  return await res.json();
+}
+
 export async function getAllTags() {
   const str = `${backendUrl}notes/all-tags`;
   let res = await fetch(str, {

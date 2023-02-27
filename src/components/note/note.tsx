@@ -22,7 +22,6 @@ const Note = ({
   handleSecondNoteChangeOrder,
   handleUpdateTags,
 }: NoteProps) => {
-  console.log(note);
 
   const [isEdit, setIsEdit] = useState(true);
   const [modalHelper, setModalHelper] = useState(false);
